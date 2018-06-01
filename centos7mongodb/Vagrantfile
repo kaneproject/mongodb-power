@@ -12,4 +12,13 @@ Vagrant.configure("2") do |config|
   config.vm.provision :shell do |shell|
     shell.inline = "sudo yum -y install mongodb-org"
   end
+  config.vm.provision :shell do |shell|
+    shell.inline = "mkdir /home/vagrant/Desktop/{mmapv1,wiredtiger}"
+  end
+  config.vm.provision :shell do |shell|
+    shell.inline = "sudo mongod --port=27017 --dbpath=/home/vagrant/Desktop/mmapv1 --storageEngine=mmapv1 --fork --logpath=/home/vagrant/Desktop/mmapv1/mmapv1.log"
+  end
+  config.vm.provision :shell do |shell|
+    shell.inline = "sudo mongod --port=27018 --dbpath=/home/vagrant/Desktop/wiredtiger --storageEngine=wiredTiger --fork --logpath=/home/vagrant/Desktop/wiredtiger/wiredtiger.log"
+  end
 end
