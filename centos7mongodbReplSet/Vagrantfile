@@ -13,6 +13,17 @@ Vagrant.configure("2") do |config|
       vb.gui = true
       vb.memory = "2048"
     end
+    machine.vm.provision :shell, inline: <<-SHELL
+      sudo cp /vagrant/mongodb.repo /etc/yum.repos.d/
+      sudo yum -y install mongodb-org
+      sudo cp /vagrant/mongod-nodo1.conf /etc/mongod.conf
+      sudo cp /vagrant/selinux.config /etc/selinux/config
+      sudo systemctl stop firewalld
+      sudo systemctl disable firewalld
+      sudo setenforce 0
+      sudo systemctl start mongod
+      sudo systemctl enable mongod
+    SHELL
   end
   config.vm.define "mongodb-nodo2" do |machine|
     machine.vm.box = "centos7"
@@ -23,6 +34,17 @@ Vagrant.configure("2") do |config|
       vb.gui = true
       vb.memory = "1024"
     end
+    machine.vm.provision :shell, inline: <<-SHELL
+      sudo cp /vagrant/mongodb.repo /etc/yum.repos.d/
+      sudo yum -y install mongodb-org
+      sudo cp /vagrant/mongod-nodo2.conf /etc/mongod.conf
+      sudo cp /vagrant/selinux.config /etc/selinux/config
+      sudo systemctl stop firewalld
+      sudo systemctl disable firewalld
+      sudo setenforce 0
+      sudo systemctl start mongod
+      sudo systemctl enable mongod
+    SHELL
   end
   config.vm.define "mongodb-nodo3" do |machine|
     machine.vm.box = "centos7"
@@ -33,15 +55,18 @@ Vagrant.configure("2") do |config|
       vb.gui = true
       vb.memory = "1024"
     end
+    machine.vm.provision :shell, inline: <<-SHELL
+      sudo cp /vagrant/mongodb.repo /etc/yum.repos.d/
+      sudo yum -y install mongodb-org
+      sudo cp /vagrant/mongod-nodo3.conf /etc/mongod.conf
+      sudo cp /vagrant/selinux.config /etc/selinux/config
+      sudo systemctl stop firewalld
+      sudo systemctl disable firewalld
+      sudo setenforce 0
+      sudo systemctl start mongod
+      sudo systemctl enable mongod
+      mongo 192.168.200.101:27017 /vagrant/enableReplicaSet.js
+    SHELL
   end
-  config.vm.provision :shell, inline: <<-SHELL
-    sudo cp /vagrant/mongodb.repo /etc/yum.repos.d/
-    sudo yum -y install mongodb-org
-    mkdir /home/vagrant/{mmapv1,wiredtiger}
-    sudo chown -R vagrant.vagrant /home/vagrant
-    sudo cp /vagrant/selinux.config /etc/selinux/config
-    sudo systemctl stop firewalld
-    sudo systemctl disable firewalld
-    sudo setenforce 0
-  SHELL
+  
 end
