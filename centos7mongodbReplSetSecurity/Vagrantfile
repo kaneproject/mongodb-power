@@ -1,0 +1,72 @@
+
+Vagrant.configure("2") do |config|
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = false
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+  config.vm.define "server1" do |machine|
+    machine.vm.box = "centos7"
+    machine.vm.network "private_network", ip: "192.168.200.101"
+    machine.vm.hostname = "server1"
+    machine.vm.provider "virtualbox" do |vb|
+      vb.name = "server1"
+      vb.gui = true
+      vb.memory = "1024"
+    end
+  end
+  config.vm.define "server2" do |machine|
+    machine.vm.box = "centos7"
+    machine.vm.network "private_network", ip: "192.168.200.102"
+    machine.vm.hostname = "server2"
+    machine.vm.provider "virtualbox" do |vb|
+      vb.name = "server2"
+      vb.gui = true
+      vb.memory = "1024"
+    end
+
+  end
+  config.vm.define "server3" do |machine|
+    machine.vm.box = "centos7"
+    machine.vm.network "private_network", ip: "192.168.200.103"
+    machine.vm.hostname = "server3"
+    machine.vm.provider "virtualbox" do |vb|
+      vb.name = "server3"
+      vb.gui = true
+      vb.memory = "1024"
+    end
+
+  end
+  config.vm.define "server4" do |machine|
+    machine.vm.box = "centos7"
+    machine.vm.network "private_network", ip: "192.168.200.104"
+    machine.vm.hostname = "server4"
+    machine.vm.provider "virtualbox" do |vb|
+      vb.name = "server4"
+      vb.gui = true
+      vb.memory = "1024"
+    end
+
+  end
+  config.vm.define "server5" do |machine|
+    machine.vm.box = "centos7"
+    machine.vm.network "private_network", ip: "192.168.200.105"
+    machine.vm.hostname = "server5"
+    machine.vm.provider "virtualbox" do |vb|
+      vb.name = "server5"
+      vb.gui = true
+      vb.memory = "1024"
+    end
+
+  end
+  config.vm.provision :shell, inline: <<-SHELL
+      sudo cp /vagrant/mongodb.repo /etc/yum.repos.d/
+      sudo yum -y install mongodb-org
+      sudo cp /vagrant/mongod.conf /etc/mongod.conf
+      sudo cp /vagrant/selinux.config /etc/selinux/config
+      sudo systemctl stop firewalld
+      sudo systemctl disable firewalld
+      sudo setenforce 0
+      sudo systemctl start mongod
+      sudo systemctl enable mongod
+  SHELL
+end
