@@ -1,0 +1,84 @@
+Vagrant.configure("2") do |config|
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = false
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+  config.vm.define "mongodb-conf1" do |machine|
+    machine.vm.box = "centos7"
+    machine.vm.network "private_network", ip: "192.168.200.101"
+    machine.vm.hostname = "mongodb-conf1"
+    machine.vm.provider "virtualbox" do |vb|
+      vb.name = "mongodb-conf1"
+      vb.gui = true
+      vb.memory = "1024"
+    end
+  end
+  config.vm.define "mongodb-conf2" do |machine|
+    machine.vm.box = "centos7"
+    machine.vm.network "private_network", ip: "192.168.200.102"
+    machine.vm.hostname = "mongodb-conf2"
+    machine.vm.provider "virtualbox" do |vb|
+      vb.name = "mongodb-conf2"
+      vb.gui = true
+      vb.memory = "1024"
+    end
+  end
+  config.vm.define "mongodb-conf3" do |machine|
+    machine.vm.box = "centos7"
+    machine.vm.network "private_network", ip: "192.168.200.103"
+    machine.vm.hostname = "mongodb-conf3"
+    machine.vm.provider "virtualbox" do |vb|
+      vb.name = "mongodb-conf3"
+      vb.gui = true
+      vb.memory = "1024"
+    end
+  end
+  config.vm.define "mongodb-rs1" do |machine|
+    machine.vm.box = "centos7"
+    machine.vm.network "private_network", ip: "192.168.200.104"
+    machine.vm.hostname = "mongodb-rs1"
+    machine.vm.provider "virtualbox" do |vb|
+      vb.name = "mongodb-rs1"
+      vb.gui = true
+      vb.memory = "1024"
+    end
+  end
+  config.vm.define "mongodb-rs2" do |machine|
+    machine.vm.box = "centos7"
+    machine.vm.network "private_network", ip: "192.168.200.105"
+    machine.vm.hostname = "mongodb-rs2"
+    machine.vm.provider "virtualbox" do |vb|
+      vb.name = "mongodb-rs2"
+      vb.gui = true
+      vb.memory = "1024"
+    end
+  end
+  config.vm.define "mongodb-rs3" do |machine|
+    machine.vm.box = "centos7"
+    machine.vm.network "private_network", ip: "192.168.200.106"
+    machine.vm.hostname = "mongodb-rs3"
+    machine.vm.provider "virtualbox" do |vb|
+      vb.name = "mongodb-rs3"
+      vb.gui = true
+      vb.memory = "1024"
+    end
+  end
+  config.vm.define "mongodb-mongos" do |machine|
+    machine.vm.box = "centos7"
+    machine.vm.network "private_network", ip: "192.168.200.150"
+    machine.vm.hostname = "mongodb-mongos"
+    machine.vm.provider "virtualbox" do |vb|
+      vb.name = "mongodb-mongos"
+      vb.gui = true
+      vb.memory = "1024"
+    end
+  end
+  config.vm.provision :shell, inline: <<-SHELL
+      sudo cp /vagrant/mongodb.repo /etc/yum.repos.d/
+      sudo yum -y install mongodb-org
+      sudo cp /vagrant/selinux.config /etc/selinux/config
+      sudo systemctl stop firewalld
+      sudo systemctl disable firewalld
+      sudo setenforce 0
+    SHELL
+end
