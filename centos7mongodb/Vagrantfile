@@ -1,6 +1,6 @@
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "centos7gui"
+  config.vm.box = "kane_project/centos7gui"
   config.vm.provider "virtualbox" do |vb|
     vb.name = "mongodb-standalone"
     vb.gui = true
